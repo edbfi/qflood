@@ -27,6 +27,17 @@ class MetadataTests(unittest.TestCase):
         self.assertIn("alpinevpn-v1.2.3", result["tags"])
         self.assertIn("latest", result["tags"])
 
+    def test_composite_versions_keep_qbittorrent_aliases(self):
+        for branch, version in [("release", "5.2.3--4.16.1"),
+                                ("nightly", "5.2.3--33316725515")]:
+            with self.subTest(branch=branch):
+                self.data["version"] = version
+                self.data["latest"] = branch == "release"
+                tags = self.build(repository="edbfi/qflood", branch=branch)["tags"]
+                for suffix in [version, "v5", "v5.2", "v5.2.3"]:
+                    self.assertIn(branch + "-" + suffix, tags)
+                self.assertEqual("latest" in tags, branch == "release")
+
     def test_missing_digest_rejected(self):
         del self.data["upstream_digest_amd64"]
         with self.assertRaises(ValueError): self.build()
