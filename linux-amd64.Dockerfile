@@ -21,9 +21,13 @@ RUN curl -fsSL "https://github.com/userdocs/qbittorrent-nox-static/releases/down
     chmod 755 "${APP_DIR}/qbittorrent-nox-lib2"
 
 ARG VERSION_FLOOD
-RUN curl -fsSL "https://github.com/jesec/flood/releases/download/v${VERSION_FLOOD}/flood-linux-x64" > "${APP_DIR}/flood" && \
-    echo "c979f1fd6cf309d143c2c7e9e13ae470f880df72a38f96f4bb4f813175c4ecee  ${APP_DIR}/flood" | sha256sum -c - && \
-    chmod 755 "${APP_DIR}/flood"
+RUN curl -fsSL "https://nightly.link/jesec/flood/actions/runs/${VERSION_FLOOD}/pkg-binaries.zip" > /tmp/flood.zip && \
+    echo "dc347a2e5604b6283d5455104d3aacc8bf98a7f3e14d51058de7fb4ea03a444c  /tmp/flood.zip" | sha256sum -c - && \
+    unzip -qo /tmp/flood.zip flood-linux-x64 -d /tmp && \
+    echo "f2656edbb797ce95b4122fb18194e50382016da0de333de997d268d94f850a98  /tmp/flood-linux-x64" | sha256sum -c - && \
+    mv /tmp/flood-linux-x64 "${APP_DIR}/flood" && \
+    chmod 755 "${APP_DIR}/flood" && \
+    rm /tmp/flood.zip
 
 COPY root/ /
 RUN find /etc/s6-overlay/s6-rc.d -name "run*" -execdir chmod +x {} +
