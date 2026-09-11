@@ -2,8 +2,8 @@
 
 rm -f "${CONFIG_DIR}/wireguard/forwarded_port_validated"
 
-if pid=$(pidof rtorrent); then
-    log_inf "[RTORRENT] Shutting down to restart with forwarded port [${port}]."
+if pid=$(pidof "qbittorrent-nox-lib${LIBTORRENT//v/}"); then
+    log_inf "[QBITTORRENT] Shutting down to restart with forwarded port [${port}]."
     kill "${pid}"
 fi
 
