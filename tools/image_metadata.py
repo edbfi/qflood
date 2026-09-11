@@ -41,7 +41,7 @@ def metadata(root, repository, branch, revision, arch):
     tags = [branch, branch + "-" + revision[:7]]
     if raw.get("version"):
         tags.append(branch + "-" + re.sub(r"[^A-Za-z0-9_.-]", "-", version))
-        match = re.fullmatch(r"v?(\d+)\.(\d+)\.(\d+)", version)
+        match = re.fullmatch(r"v?(\d+)\.(\d+)\.(\d+)(?:--[A-Za-z0-9_.-]+)?", version)
         if match:
             parts = match.groups()
             tags.extend(branch + "-v" + ".".join(parts[:n]) for n in (1, 2, 3))
