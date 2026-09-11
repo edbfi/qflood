@@ -1,37 +1,28 @@
 # syntax=docker/dockerfile:1
-# check=skip=InvalidDefaultArgInFrom,SecretsUsedInArgOrEnv
+# check=skip=InvalidDefaultArgInFrom
 ARG UPSTREAM_IMAGE
 ARG UPSTREAM_TAG_SHA
+ARG UPSTREAM_DIGEST_AMD64
 
-# https://github.com/rakshasa/rtorrent/issues/1479#issuecomment-2888925659
-FROM ${UPSTREAM_IMAGE}:${UPSTREAM_TAG_SHA} AS builder
-RUN apk add --no-cache build-base linux-headers curl-dev ncurses-dev tinyxml2-dev
-ARG VERSION
-RUN mkdir "/tmp/libtorrent" && \
-    curl -fsSL "https://github.com/rakshasa/rtorrent/releases/download/v${VERSION}/libtorrent-${VERSION}.tar.gz" | tar xzf - -C "/tmp/libtorrent" --strip-components=1 && \
-    cd "/tmp/libtorrent" && \
-    ./configure --disable-debug --disable-shared --enable-static --enable-aligned && \
-    make -j$(nproc) CXXFLAGS="-w -O3 -flto -Werror=odr -Werror=lto-type-mismatch -Werror=strict-aliasing" && \
-    make install
-RUN mkdir "/tmp/rtorrent" && \
-    curl -fsSL "https://github.com/rakshasa/rtorrent/releases/download/v${VERSION}/rtorrent-${VERSION}.tar.gz" | tar xzf - -C "/tmp/rtorrent" --strip-components=1 && \
-    cd "/tmp/rtorrent" && \
-    ./configure --disable-debug --disable-shared --enable-static --enable-aligned --with-xmlrpc-tinyxml2 && \
-    make -j$(nproc) CXXFLAGS="-w -O3 -flto -Werror=odr -Werror=lto-type-mismatch -Werror=strict-aliasing" && \
-    make install
-
-FROM ${UPSTREAM_IMAGE}:${UPSTREAM_TAG_SHA}
-EXPOSE 3000
+FROM ${UPSTREAM_IMAGE}@${UPSTREAM_DIGEST_AMD64}
+EXPOSE 3000 8080
 ARG IMAGE_STATS
-ENV IMAGE_STATS=${IMAGE_STATS} FLOOD_AUTH="false" WEBUI_PORTS="3000/tcp"
+ENV IMAGE_STATS=${IMAGE_STATS} FLOOD_AUTH="false" WEBUI_PORTS="8080/tcp,3000/tcp" LIBTORRENT="v2"
 
-RUN apk add --no-cache xmlrpc-c-tools nginx openssl mediainfo && \
-    ln -s "${CONFIG_DIR}/rpc2/basic_auth_credentials" "${APP_DIR}/basic_auth_credentials"
+RUN ln -s "${CONFIG_DIR}" "${APP_DIR}/qBittorrent"
 
-COPY --from=builder /usr/local/bin/rtorrent "${APP_DIR}/rtorrent"
+ARG VERSION_LIB1
+ARG VERSION_LIB2
+RUN curl -fsSL "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${VERSION_LIB1%%/*}/x86_64-qbittorrent-nox" > "${APP_DIR}/qbittorrent-nox-lib1" && \
+    echo "0d3b7f4879b2a8b0413c6e76a471eeccfc5895d318bc615d76a7a17346767d34  ${APP_DIR}/qbittorrent-nox-lib1" | sha256sum -c - && \
+    chmod 755 "${APP_DIR}/qbittorrent-nox-lib1" && \
+    curl -fsSL "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${VERSION_LIB2%%/*}/x86_64-qbittorrent-nox" > "${APP_DIR}/qbittorrent-nox-lib2" && \
+    echo "c1839caf9b7dbddee09e9a4394bb5b17dc70ecd7c3a9b45e84331d5a1389a645  ${APP_DIR}/qbittorrent-nox-lib2" | sha256sum -c - && \
+    chmod 755 "${APP_DIR}/qbittorrent-nox-lib2"
 
 ARG VERSION_FLOOD
 RUN curl -fsSL "https://github.com/jesec/flood/releases/download/v${VERSION_FLOOD}/flood-linux-x64" > "${APP_DIR}/flood" && \
+    echo "c979f1fd6cf309d143c2c7e9e13ae470f880df72a38f96f4bb4f813175c4ecee  ${APP_DIR}/flood" | sha256sum -c - && \
     chmod 755 "${APP_DIR}/flood"
 
 COPY root/ /
