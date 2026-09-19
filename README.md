@@ -10,7 +10,7 @@ Set `FLOOD_AUTH=true` for Flood account setup. Configure its qBittorrent connect
 
 Upstream GPL-3.0 image license and application licenses remain applicable. VPN connectivity and real torrent transfers require separate integration validation.
 
-Shared CI and Renovate presets use automation `v3.0.0`. The custom checked merger
+Shared CI and Renovate presets use automation `v3.0.1`. The custom checked merger
 is retired. Renovate automerge is explicitly disabled pending verified required
 CI enforcement and a native Renovate canary. The read-only PR policy check
 preserves sign-offs, Conventional Commit titles, review and hold requirements.
