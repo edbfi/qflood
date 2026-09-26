@@ -9,17 +9,3 @@ Native amd64/arm64 CI validates both libtorrent modes, Flood HTTP and its connec
 Set `FLOOD_AUTH=true` for Flood account setup. Configure its qBittorrent connection using the Web UI credentials. The optional no-auth mode expects qBittorrent to permit localhost access; enabling it is an explicit user configuration choice. Existing authentication defaults are preserved.
 
 Upstream GPL-3.0 image license and application licenses remain applicable. VPN connectivity and real torrent transfers require separate integration validation.
-
-Shared CI and Renovate presets use automation `v4.0.0`. Renovate owns dependency
-PR merging through the shared `automerge.json` preset: it arms GitHub auto-merge
-with the rebase strategy, preserving commit author sign-offs, and GitHub merges
-only after every required check passes. Strict, GitHub Actions-sourced required
-CI and PR policy checks must pass on an up-to-date branch; the automated merger
-has no bypass. The read-only PR policy check preserves sign-offs, Conventional
-Commit titles, reviews and hold labels. Independent policy events run to
-completion without cancelling one another; after a pass, policy re-runs the other
-event's older failed verdict for the same head. The shared release-age policy
-remains active, and Renovate configuration updates require manual merging. The
-custom checked merger remains retired.
-Native architecture builds and every existing container smoke assertion remain
-mandatory; image publication remains an explicit manual operation after CI.
