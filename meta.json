@@ -1,6 +1,5 @@
 {
   "description": "Nightly snapshot",
-  "flood_binary_version": "0.0.0-master.1269b63",
   "latest": false,
   "test_amd64": true,
   "test_arm64": true,
