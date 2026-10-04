@@ -4,7 +4,7 @@ Based on [hotio/rflood](https://github.com/hotio/rflood), replacing rTorrent wit
 
 [Documentation and examples](https://web.edb.fi/containers/qflood/).
 
-Native amd64/arm64 CI validates both libtorrent modes, Flood HTTP and its connection to qBittorrent. Publication is manual after review. Base images and application downloads are SHA-256 pinned; update checksums with versions. Nightly snapshots are reviewed and pinned, not automatically published on upstream events.
+CI builds the amd64 and arm64 images and checks that Flood answers before publishing them. Base image tags and application versions in `meta.json` are updated hourly through their `__command` entries. The nightly image follows the latest Flood `master` build, and every update is built and published.
 
 Set `FLOOD_AUTH=true` for Flood account setup. Configure its qBittorrent connection using the Web UI credentials. The optional no-auth mode expects qBittorrent to permit localhost access; enabling it is an explicit user configuration choice. Existing authentication defaults are preserved.
 
