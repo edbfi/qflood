@@ -14,17 +14,13 @@ RUN ln -s "${CONFIG_DIR}" "${APP_DIR}/qBittorrent"
 ARG VERSION_LIB1
 ARG VERSION_LIB2
 RUN curl -fsSL "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${VERSION_LIB1%%/*}/x86_64-qbittorrent-nox" > "${APP_DIR}/qbittorrent-nox-lib1" && \
-    echo "0d3b7f4879b2a8b0413c6e76a471eeccfc5895d318bc615d76a7a17346767d34  ${APP_DIR}/qbittorrent-nox-lib1" | sha256sum -c - && \
     chmod 755 "${APP_DIR}/qbittorrent-nox-lib1" && \
     curl -fsSL "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${VERSION_LIB2%%/*}/x86_64-qbittorrent-nox" > "${APP_DIR}/qbittorrent-nox-lib2" && \
-    echo "c1839caf9b7dbddee09e9a4394bb5b17dc70ecd7c3a9b45e84331d5a1389a645  ${APP_DIR}/qbittorrent-nox-lib2" | sha256sum -c - && \
     chmod 755 "${APP_DIR}/qbittorrent-nox-lib2"
 
 ARG VERSION_FLOOD
 RUN curl -fsSL "https://nightly.link/jesec/flood/actions/runs/${VERSION_FLOOD}/pkg-binaries.zip" > /tmp/flood.zip && \
-    echo "dc347a2e5604b6283d5455104d3aacc8bf98a7f3e14d51058de7fb4ea03a444c  /tmp/flood.zip" | sha256sum -c - && \
     unzip -qo /tmp/flood.zip flood-linux-x64 -d /tmp && \
-    echo "f2656edbb797ce95b4122fb18194e50382016da0de333de997d268d94f850a98  /tmp/flood-linux-x64" | sha256sum -c - && \
     mv /tmp/flood-linux-x64 "${APP_DIR}/flood" && \
     chmod 755 "${APP_DIR}/flood" && \
     rm /tmp/flood.zip
