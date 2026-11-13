@@ -8,6 +8,7 @@
   <a href="https://github.com/moby/moby" title="Docker Engine source (Moby)"><img src="https://img.shields.io/badge/Docker-2496ED?style=flat&amp;logo=docker&amp;logoColor=white" alt="Docker"></a>
   <a href="https://github.com/qbittorrent/qBittorrent"><img src="https://img.shields.io/badge/qBittorrent-2F67BA?style=flat&amp;logo=qbittorrent&amp;logoColor=white" alt="qBittorrent"></a>
   <a href="https://github.com/jesec/flood"><img src="https://img.shields.io/badge/Flood-4A90E2?style=flat" alt="Flood"></a>
+  <a href="https://github.com/edbfi/qflood/actions/workflows/call-build.yml?query=branch%3Arelease"><img src="https://img.shields.io/github/actions/workflow/status/edbfi/qflood/call-build.yml?branch=release&amp;event=push&amp;label=CI&amp;style=flat" alt="CI"></a>
 </p>
 
 Based on [hotio/rflood](https://github.com/hotio/rflood), replacing rTorrent with qBittorrent and retaining Flood. Uses libtorrent v2 by default; `LIBTORRENT=v1` selects the alternative binary.
